@@ -1,0 +1,4 @@
+{
+    "OPSGENIE_API_URL": "https://api.opsgenie.com/v2/alerts",
+    "OPSGENIE_API_TOKEN": "YOUR-TOKEN"
+}

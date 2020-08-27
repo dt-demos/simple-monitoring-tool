@@ -1,0 +1,16 @@
+{
+    "monitors": [ 
+        {"type": "health", "id":"h1", "environment":"prod", "service": "simple-web-app", "command":"", "url": "http://52.255.146.228:8080", "target": "0", "enabled": "true"},
+        {"type": "health", "id":"h2", "environment":"prod", "service": "simple-web-service-1", "command":"", "url": "http://52.255.146.228:8180/api/message", "target": "0", "enabled": "true"},
+        {"type": "health", "id":"h3", "environment":"prod", "service": "simple-web-service-2", "command":"", "url": "http://52.255.146.228:8280/api/message", "target": "0", "enabled": "true"},
+        {"type": "health", "id":"h4", "environment":"prod", "service": "simple-web-service-3", "command":"", "url": "http://52.255.146.228:8380/api/message", "target": "0", "enabled": "true"},
+        {"type": "state", "id":"s1", "environment":"prod", "service": "simple-web-app", "command":"echo1 hello", "url": "", "target": "0", "enabled": "true"},
+        {"type": "state", "id":"s2", "environment":"prod", "service": "simple-web-service-1", "command":"echo1 hello", "url": "", "target": "0", "enabled": "true"},
+        {"type": "state", "id":"s3", "environment":"prod", "service": "simple-web-service-2", "command":"echo1 hello", "url": "", "target": "0", "enabled": "true"},
+        {"type": "state", "id":"s4", "environment":"prod", "service": "simple-web-service-3", "command":"echo1 hello", "url": "", "target": "0", "enabled": "true"},
+        {"type": "performance", "id":"p1", "environment":"prod", "service": "simple-web-app", "command":"", "url": "http://52.255.146.228:8080", "target": "0.01", "enabled": "true"},
+        {"type": "performance", "id":"p2", "environment":"prod", "service": "simple-web-service-1", "command":"", "url": "http://52.255.146.228:8180/api/message", "target": "0.01", "enabled": "true"},
+        {"type": "performance", "id":"p3", "environment":"prod", "service": "simple-web-service-2", "command":"", "url": "http://52.255.146.228:8280/api/message", "target": "0.01", "enabled": "true"},
+        {"type": "performance", "id":"p4", "environment":"prod", "service": "simple-web-service-3", "command":"", "url": "http://52.255.146.228:8380/api/message", "target": "0.01", "enabled": "true"}
+    ]
+}
