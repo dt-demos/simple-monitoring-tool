@@ -8,6 +8,7 @@ from multiprocessing import Process
 
 debugOutput=False
 sendopsgenie=False
+sendpagerduty=False
 alertFile='results/alert.csv'
 
 def debugMessage(message):
@@ -25,13 +26,17 @@ def readConfig(configfilename):
     debugMessage("DEBUG - readConfig() monitoringFrequencySeconds : " + monitoringFrequencySeconds)
     debugMessage("DEBUG - readConfig() debugOutput                : " + str(debugOutput))
     debugMessage("DEBUG - readConfig() sendopsgenie               : " + str(sendopsgenie))
+    debugMessage("DEBUG - readConfig() sendpagerduty              : " + str(sendpagerduty))
     if opsgenieApiUrl:
         debugMessage("DEBUG - readConfig() opsgenieApiUrl             : " + opsgenieApiUrl)
+    if pagerDutyApiUrl:
+        debugMessage("DEBUG - readConfig() pagerDutyApiUrl            : " + pagerDutyApiUrl)
     debugMessage("DEBUG - readConfig() configfilename             : " + configfilename)
     debugMessage("DEBUG - readConfig() =====================================================")
-    debugMessage("DEBUG - readConfig() monitors:")
+    debugMessage("DEBUG - readConfig() enabled monitors:")
     for url in data['monitors']:
-        debugMessage('                       id: ' + url['id'] + ', command: ' + url['command'] + ', url: ' + url['url'] + ', target: ' + url['target'])
+        if url['enabled'] == "true":
+            debugMessage('                       id: ' + url['id'] + ', command: ' + url['command'] + ', url: ' + url['url'] + ', target: ' + url['target'])
     debugMessage("DEBUG - readConfig() =====================================================")
 
 def createAlertFile():
@@ -40,11 +45,51 @@ def createAlertFile():
     f.close()
 
 def sendAlert(id,alertType,environment,service,alertMessage):
+    # https://developer.pagerduty.com/docs/events-api-v2/overview/
     alertDateTime=str(datetime.now().strftime("%m/%d/%Y %H:%M:%S"))
     # write alert to file
     f = open(alertFile, "a")
     f.write(alertDateTime + ',' + id + ',' + alertType + ',' + environment + ',' + service + ',' + alertMessage+'\n')
     f.close()
+
+    if sendpagerduty:
+        summary=environment+'-'+service + '-' + str(datetime.now().strftime("%m/%d/%Y %H:%M:%S"))
+        source="simple-monitoring-tool"
+        component=environment+'-'+service
+        group=""
+        theclass=""
+        routing_key=pagerdutyApiToken
+        event_action="trigger"
+        dedup_key=""
+
+        if alertType=='state':
+            severity="critical"
+        elif alertType=='health':
+            severity="error"
+        else:   # performance
+            severity="warning"
+
+        alertHeaders = {'content-type': 'application/json' }
+        alertBodyString = ' { "payload": { \
+            "summary":"' + summary + '", \
+            "severity":"' + severity + '", \
+            "source":"' + source + '", \
+            "component":"' + component + '", \
+            "group":"' + group + '", \
+            "class":"' + theclass + '"}, \
+            "routing_key":"' + routing_key + '", \
+            "event_action":"' + event_action + '", \
+            "dedup_key":"' + dedup_key + '"}'
+        alertBodyJson = json.loads(alertBodyString)
+
+        debugMessage("DEBUG - sendAlert() - pagerDutyApiUrl: " + pagerDutyApiUrl)
+        debugMessage("DEBUG - sendAlert() - alertBody: " + json.dumps(alertBodyJson))
+        debugMessage("DEBUG - sendAlert() - alerteaders: " + str(alertHeaders))
+        alertResponse = requests.post(pagerDutyApiUrl, data=json.dumps(alertBodyJson), headers=alertHeaders)
+        debugMessage("DEBUG - sendAlert() - alertResponse.text: " + str(alertResponse.text))
+        debugMessage("DEBUG - sendAlert() - alertResponse.status_code: " + str(alertResponse.status_code))
+    else:
+        debugMessage("DEBUG - sendAlert() - Skipping PagerDuty call")
 
     if sendopsgenie:
         # call Opsgenie API - https://docs.opsgenie.com/docs/alert-api
@@ -162,19 +207,28 @@ def process(configfilename):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument('-u','--url', help='opsgenie-api-url')
-    ap.add_argument('-t','--token', help='opsgenie-api-token')
-    ap.add_argument('-f','--frequency', required=True, help='monitoring-frequency-seconds')
-    ap.add_argument('-c','--configfilename', help='configfilename', default='config.json')
-    ap.add_argument('--sendopsgenie', help='make opsgenie call', action='store_true', default=False)
+    ap.add_argument('-f','--frequency', required=True, help='monitoring frequency in seconds')
+    ap.add_argument('-c','--configfilename', help='montoring config filename', default='config.json')
     ap.add_argument('--debug', help='add for more logging detail', action='store_true', default=False)
+    ap.add_argument('--sendopsgenie', help='make opsgenie call', action='store_true', default=False)
+    ap.add_argument('--ogurl', help='opsgenie api url')
+    ap.add_argument('--ogtoken', help='opsgenie api token')
+    ap.add_argument('--sendpagerduty', help='make sendpagerduty call', action='store_true', default=False)
+    ap.add_argument('--pdurl', help='pagerduty api url')
+    ap.add_argument('--pdkey', help='pagerduty integration key')
     args = vars(ap.parse_args())
     
-    opsgenieApiUrl = args['url']
-    opsgenieApiToken = args['token']
+    opsgenieApiUrl = args['ogurl']
+    opsgenieApiToken = args['ogtoken']
+    pagerDutyApiUrl = args['pdurl']
+    pagerdutyApiToken = args['pdkey']
     monitoringFrequencySeconds = args['frequency']
+
+    print(args["sendopsgenie"])
     if args["sendopsgenie"]:
         sendopsgenie = True
+    if args["sendpagerduty"]:
+        sendpagerduty = True
     if args["debug"]:
         debugOutput = True
 

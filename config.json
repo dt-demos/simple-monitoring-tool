@@ -1,9 +1,9 @@
 {
     "monitors": [ 
-        {"type": "health", "id":"h1", "environment":"prod", "service": "junk-site", "command":"", "url": "http://www.dynatrace.com/junk1", "target": "0", "enabled": "true"},
-        {"type": "health", "id":"h2", "environment":"prod", "service": "junk-site", "command":"", "url": "http://www.dynatrace.com/junk2", "target": "0", "enabled": "true"},
-        {"type": "state", "id":"s1", "environment":"prod", "service": "example-command", "command":"echo1 hello1", "url": "", "target": "0", "enabled": "true"},
-        {"type": "state", "id":"s2", "environment":"prod", "service": "example-command", "command":"echo1 hello2", "url": "", "target": "0", "enabled": "true"},
+        {"type": "health", "id":"h1", "environment":"prod", "service": "junk-site1", "command":"", "url": "http://www.dynatrace.com/junk1", "target": "0", "enabled": "true"},
+        {"type": "health", "id":"h2", "environment":"prod", "service": "junk-site2", "command":"", "url": "http://www.dynatrace.com/junk2", "target": "0", "enabled": "true"},
+        {"type": "state", "id":"s1", "environment":"prod", "service": "example-command1", "command":"echo1 hello1", "url": "", "target": "0", "enabled": "true"},
+        {"type": "state", "id":"s2", "environment":"prod", "service": "example-command2", "command":"echo1 hello2", "url": "", "target": "0", "enabled": "true"},
         {"type": "performance", "id":"p1", "environment":"prod", "service": "dynatrace-home", "command":"", "url": "http://www.dynatrace.com", "target": "0.01", "enabled": "true"},
         {"type": "performance", "id":"p1", "environment":"prod", "service": "dynatrace-partners", "command":"", "url": "http://www.dynatrace.com/partners", "target": "0.01", "enabled": "true"}
     ]

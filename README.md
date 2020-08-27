@@ -1,6 +1,9 @@
 # Overview
 
-Simple monitoring script this can be used for demoing alerts storms.  It will script errors or `alerts` to a local CSV file or optional create Atlassian Opsgenie alerts using the [Opsgenie API](https://docs.opsgenie.com/docs/alert-api).
+Simple monitoring script this can be used for demoing alerts storms.  It will script errors or `alerts` to:
+* A local CSV file
+* optional create Atlassian Opsgenie alerts using the [Opsgenie API](https://docs.opsgenie.com/docs/alert-api).
+* optional create PagerDuty alerts using the [PagerDuty API](https://developer.pagerduty.com/docs/events-api-v2/overview).
 
 <img src="images/overview.png" width="700"/>
 
@@ -24,6 +27,9 @@ If Opsgenie alerting is enables, each alert will be create an appear in the aler
 
 <img src="images/opsgenie.png" width="700"/>
 
+If PagerDuty alerting is enables, each alert will be create an appear in the alert page as shown below.
+
+<img src="images/pd-alerts.png" width="700"/>
 
 # Usage
 
@@ -38,23 +44,34 @@ The [run.sh](run.sh) script is used to run the monitor and this accepts multiple
 Or you can pass in one or more parameters, for example:
 
 ```
-./run.sh --frequency 10 --debug true --sendopsgenie false --configfilename config.json.demo
+./run.sh --frequency 10 --debug true --sendopsgenie true --sendpagerduty true --configfilename config.json.demo
 ```
 
-Parameters
+Optional Parameters
 * `--frequency XX` - Sets the loop frequency to `XX` seconds
 * `--debug [true/false]` - Sets addition debug console log output
-* `--sendopsgenie [true/false]` - When an alert is created, this enables it to call the 
+* `--sendopsgenie [true/false]` - When an alert is created, this enables it to call the API
+* `--sendpagerduty [true/false]` - When an alert is created, this enables it to call the API
 * `--configfilename XX` - Set a custom monitor config file. `XX` is file name such as `config.json.demo`
 
 --frequency 10 --debug true --sendopsgenie false --configfilename config.json.demo
 
-# OpeGenie Alert API setup
+# Opsgenie Alert API setup
 
-If the `--sendopsgenie true` parameter is passed, then the creds.json files must be created with the opsgenie URL and token.
+If the `--sendopsgenie true` parameter is passed, then the creds.json files must be created with the Opsgenie URL and token.
 
 Just run this command `cp creds.template creds.json` and edit the `creds.json` file.
 
-The API is created within Opsgenie [integration page](https://app.opsgenie.com/settings/integration/add/API/) as an `API` integration. This is the configuration page in Opsgenie.
+The API is created within Opsgenie [integration page](https://app.opsgenie.com/settings/integration/add/API/) as an `API` integration. This is the configuration page in Opsgenie where you get the OPSGENIE_API_TOKEN.
 
 <img src="images/token.png" width="700"/>
+
+# PagerDuty Event API setup
+
+If the `--sendpagerduty true` parameter is passed, then the creds.json files must be created with the PagerDuty URL and token.
+
+Just run this command `cp creds.template creds.json` and edit the `creds.json` file.
+
+The KEY is created within PagerDuty [integration page](https://support.pagerduty.com/docs/services-and-integrations) as an `service integration`. This is the configuration page in PagerDuty where you get the PAGERDUTY_INTEGRATION_KEY.
+
+<img src="images/pd-key.png" width="700"/>

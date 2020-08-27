@@ -1,4 +1,6 @@
 {
     "OPSGENIE_API_URL": "https://api.opsgenie.com/v2/alerts",
-    "OPSGENIE_API_TOKEN": "YOUR-TOKEN"
+    "OPSGENIE_API_TOKEN": "YOUR-TOKEN",
+    "PAGERDUTY_API_URL": "https://events.pagerduty.com/v2/enqueue",
+    "PAGERDUTY_INTEGRATION_KEY": "YOUR-TOKEN"
 }
