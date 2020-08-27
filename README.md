@@ -2,7 +2,7 @@
 
 Simple monitoring script this can be used for demoing alerts storms.  It will script errors or `alerts` to a local CSV file or optional create Atlassian Opsgenie alerts using the [Opsgenie API](https://docs.opsgenie.com/docs/alert-api).
 
-<img src="images/overview.png" width="500"/>
+<img src="images/overview.png" width="700"/>
 
 The script runs in a continuous loop using the provided frequency argument (default is 30 seconds) and call all the monitors defined in a JSON config file. Any failed monitor results in an alert.
 
@@ -18,11 +18,11 @@ See [config.json](config.json) as an example.  Multiple monitor of each type is 
 
 Alerts will always be written to the file `results/alert.csv` file as shown below.
 
-<img src="images/csv.png" width="500"/>
+<img src="images/csv.png" width="700"/>
 
 If Opsgenie alerting is enables, each alert will be create an appear in the alert page as shown below.
 
-<img src="images/opsgenie.png" width="500"/>
+<img src="images/opsgenie.png" width="700"/>
 
 
 # Usage
@@ -57,4 +57,4 @@ Just run this command `cp creds.template creds.json` and edit the `creds.json` f
 
 The API is created within Opsgenie [integration page](https://app.opsgenie.com/settings/integration/add/API/) as an `API` integration. This is the configuration page in Opsgenie.
 
-<img src="images/token.png" width="500"/>
+<img src="images/token.png" width="700"/>
